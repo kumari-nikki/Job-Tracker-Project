@@ -1,6 +1,5 @@
-
-
 import React, { useState } from 'react'
+import { useNavigate } from "react-router-dom"; 
 import Navbar from '../shared/Navbar'
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -9,41 +8,46 @@ import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom";
 import { Toaster, toast } from "sonner";
 import axios from "axios";
+import { USER_API_END_POINT } from "@/utils/constant";
 
 function Login() {
+  const navigate = useNavigate(); // ✅ must initialize navigate
   const [input, setInput] = useState({
     email: "",
     password: "",
     role: ""
   });
+
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   }
+
   const submitHandler = async (e) => {
-    e.preventDefault();
-    const submitHandler = async (e) => {
-      e.preventDefault();
-      try {
-        const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
-          headers: {
-            "Content-Type": "application/json"
-          },
-          withCredentials: true,
-        });
-        if (res.data.success) {
-          navigate("/");
-          toast.success(res.data.message);
-        }
+    e.preventDefault(); 
+    try {
+      const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        withCredentials: true,
+      });
+
+      if (res.data.success) {
+        toast.success(res.data.message);
+        navigate("/"); // redirect after success
+      } else {
+        toast.error(res.data.message);
       }
-      catch (error) {
-        console.log(error);
-            toast.error(error.response.data.message);
-      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message || "Something went wrong");
     }
   }
+
   return (
     <div>
       <Navbar />
+      <Toaster /> {/* must include Toaster to show toast messages */}
       <div className='flex items-center justify-center max-w-7xl mx-auto'>
         <form onSubmit={submitHandler} className='w-1/2 border border-gray-200 rounded-md p-4 my-10 bg-gray-50'>
           <h1 className='font-bold text-xl mb-5'>Login</h1>
@@ -97,4 +101,4 @@ function Login() {
   )
 }
 
-export default Login
+export default Login;
