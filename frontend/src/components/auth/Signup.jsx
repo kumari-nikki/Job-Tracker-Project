@@ -1,14 +1,17 @@
 
 import React, { useState } from 'react'
 import Navbar from '../shared/Navbar'
+import { useDispatch, useSelector } from 'react-redux';
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { RadioGroup } from "@/components/ui/radio-group"
 import { Button } from "@/components/ui/button"
 import { Link, useNavigate } from "react-router-dom";
-import { Toaster,toast } from "sonner";
+import { Toaster, toast } from "sonner";
 import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constant";
+import { setLoading } from '@/redux/authSlice';
+import { Loader2 } from "lucide-react";
 function Signup() {
     const [input, setInput] = useState({
         fullName: "",
@@ -18,6 +21,8 @@ function Signup() {
         role: "",
         file: ""
     });
+    const { loading } = useSelector(store => store.auth);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
@@ -37,6 +42,7 @@ function Signup() {
             formData.append("file", input.file);
         }
         try {
+              dispatch(setLoading(true));
             const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
@@ -52,10 +58,14 @@ function Signup() {
             console.log(error);
             toast.error(error.response.data.message);
         }
+        finally {
+              dispatch(setLoading(false));
+            }
     }
     return (
         <div>
             <Navbar />
+              <Toaster />
             <div className='flex items-center justify-center max-w-7xl mx-auto'>
                 <form onSubmit={submitHandler} className='w-1/2 border border-gray-200 rounded-md p-4 my-10 bg-gray-50'>
                     <h1 className='font-bold text-xl mb-5'>Sign Up</h1>
@@ -128,12 +138,21 @@ function Signup() {
                             />
                         </div>
                     </div>
-                    <Button type="submit" className="w-full my-4 bg-black text-white hover:bg-gray-800 transition">Signup</Button>
+
+
+                    {
+                        loading ? (
+                            <Button className="w-full my-4 bg-gray-500 text-white cursor-not-allowed">
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait
+                            </Button>
+                        ) : (
+                            <Button type="submit" className="w-full my-4 bg-black text-white hover:bg-gray-800 transition">Signup</Button>
+                        )
+                    }
                     <span className='text-sm'>Already have an account? <Link to="/login" className="text-blue-600">Login</Link></span>
                 </form>
             </div>
         </div>
     )
 }
-
 export default Signup
