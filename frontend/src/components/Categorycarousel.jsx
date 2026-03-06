@@ -16,16 +16,16 @@ function Categorycarousel() {
                 <CarouselContent>
                     {
                         category.map((cat) => (
-                            <CarouselItem className="md:basis-1/2 lg-basis-1/3 ">
-                                <Button variant="default" className="rounded-full">{cat}</Button>
+                            <CarouselItem key={cat} className="md:basis-1/2 lg:basis-1/3">
+                                <Button variant="default" className="rounded-full">
+                                    {cat}
+                                </Button>
                             </CarouselItem>
-
                         ))
                     }
                 </CarouselContent>
                 <CarouselPrevious />
                 <CarouselNext />
-
             </Carousel>
         </div>
     )
