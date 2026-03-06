@@ -15,7 +15,7 @@ function Categorycarousel() {
             <Carousel className="w-full max-w-xl mx-auto my-20 ">
                 <CarouselContent>
                     {
-                        category.map((cat, index) => (
+                        category.map((cat) => (
                             <CarouselItem className="md:basis-1/2 lg-basis-1/3 ">
                                 <Button variant="default" className="rounded-full">{cat}</Button>
                             </CarouselItem>
