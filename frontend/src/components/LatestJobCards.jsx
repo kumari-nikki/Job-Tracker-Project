@@ -12,8 +12,8 @@ function LatestJobCards() {
                 <p className='text-sm text-gray-600'>Lorem ipsum dolor sit amet.</p>
             </div>
             <div className='flex items-center gap-2 mt-4'>
-            <Badge className='text-blue-700 font-bold' variant="ghost"> 12 Positions</Badge>
-              <Badge className='text-[#F83002] font-bold' variant="ghost"> Part Time</Badge>
+                <Badge className='text-blue-700 font-bold' variant="ghost"> 12 Positions</Badge>
+                <Badge className='text-[#F83002] font-bold' variant="ghost"> Part Time</Badge>
                 <Badge className='text-[#7209b7] font-bold' variant="ghost"> 24 LPA</Badge>
             </div>
         </div>
