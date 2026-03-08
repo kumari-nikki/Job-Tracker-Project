@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { LogOut,  User2 } from "lucide-react";
+import { useSelector } from "react-redux";
 import {
     Popover,
     PopoverContent,
@@ -11,11 +13,11 @@ import {
     Avatar,
     AvatarImage,
 } from "@/components/ui/avatar"
-import { LogOut, User, User2 } from "lucide-react";
-
 
 function Navbar() {
-    const user = false;
+    console.log("Navbar rendered"); 
+    const {user}=useSelector(store=>store.auth)
+      console.log("User from Redux:", user); 
     return (
         <div className="bg-white">
             <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
@@ -64,19 +66,17 @@ function Navbar() {
                             <div className="flex flex-col my-2 text-gray-600">
                                 <div className="flex w-fit items-center gap-2 cursor-pointer">
                                     <User2 />
-                                    <Button variant="Link">View Profile</Button>
+                                    <Button variant="Link"><Link to="/profile">View Profile</Link></Button>
                                 </div>
                                 <div className="flex w-fit items-center gap-2 cursor-pointer">
                                     <LogOut />
                                     <Button variant="Link">Logout</Button>
                                 </div>
-
                             </div>
                         </PopoverContent>
                     </Popover>
                     )
                     }
-
                 </div>
             </div>
         </div>

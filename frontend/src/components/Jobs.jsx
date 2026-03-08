@@ -10,7 +10,7 @@ const Jobs = () => {
       <Navbar/>
       <div className='max-w-7xl mx-auto mt-5'>
         <div className='flex gap-5'>
-          <div className='w-20%'>
+          <div className='w-[20%]'>
             <FilterCard />
           </div>
           {
@@ -20,7 +20,7 @@ const Jobs = () => {
                   {
                     jobsArray.map((item,index) => (
                       <div>
-                        <Job  key={index}/>
+                        <Job key={index}/>
                       </div>
                     ))
                   }

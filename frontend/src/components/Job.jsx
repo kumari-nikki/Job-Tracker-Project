@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 
 function Job() {
     return (
-        <div className='p-5 rounded-md shadow-xl bg-white border-gray-200'>
+        <div className='p-5 rounded-md shadow-xl bg-white border border-gray-200'>
 
             <div className='flex items-center justify-between'>
                 <p className='text-sm text-gray-500'>2 days ago</p>
