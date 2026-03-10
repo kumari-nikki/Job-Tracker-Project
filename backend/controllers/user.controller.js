@@ -1,6 +1,8 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import getDataUri from "../utils/datauri.js";
+import cloudinary from "../utils/cloudinary.js";
 
 export const register = async (req, res) => {
     try {
@@ -11,6 +13,10 @@ export const register = async (req, res) => {
                 success: false
             });
         };
+        const file = req.file;
+        const fileUri = getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+
         const user = await User.findOne({ email });
         if (user) {
             return res.status(400).json({
@@ -24,8 +30,11 @@ export const register = async (req, res) => {
             email,
             phoneNumber,
             password: hashedPassword,
-            role
-        })
+            role,
+            profile: {
+                profilePhoto: cloudResponse.secure_url,
+            }
+        });
         return res.status(201).json({
             message: "Account created successfully.",
             success: true
@@ -117,15 +126,20 @@ export const updateProfile = async (req, res) => {
     try {
         const { fullName, email, phoneNumber, bio, skills } = req.body;
         const file = req.file;
-       
+        console.log(file)
+
         //cloudinary comes here
-        let skillsArray ;
-        if(skills)
-        {
-           skillsArray = skills.split(",");   
+        const fileUri = getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content)
+
+        // 2️⃣ Parse skills if provided
+        let skillsArray;
+        if (skills) {
+            skillsArray = skills.split(",").map(s => s.trim());
         }
-        
-        const userId = req.id;//middleware authentication
+
+        // 3️⃣ Get user from middleware
+        const userId = req.id;
         let user = await User.findById(userId);
         if (!user) {
             return res.status(400).json({
@@ -133,14 +147,21 @@ export const updateProfile = async (req, res) => {
                 success: false
             });
         }
-        //updating the data
-        if(fullName)  user.fullName = fullName
-           if(email) user.email = email
-            if(phoneNumber) user.phoneNumber = phoneNumber
-           if(bio) user.profile.bio = bio
-            if(skills) user.profile.skills = skillsArray
-        //resume comes later here
+
+        // 4️⃣ Update profile fields
+        if (fullName) user.fullName = fullName;
+        if (email) user.email = email;
+        if (phoneNumber) user.phoneNumber = phoneNumber;
+        if (bio) user.profile.bio = bio;
+        if (skills) user.profile.skills = skillsArray;
+        if (cloudResponse) user.profile.resume = cloudResponse.secure_url;
+
         await user.save();
+        if (cloudResponse) {
+            user.profile.resume = cloudResponse.secure_url;// save the cloudinary url
+            user.profile.resumeOriginalName = file.originalname;// save the original name
+        }
+        // 5️⃣ Return updated user
         user = {
             _id: user._id,
             fullName: user.fullName,
@@ -149,13 +170,14 @@ export const updateProfile = async (req, res) => {
             role: user.role,
             profile: user.profile
         }
+
         return res.status(200).json({
             message: "Profile updated successfully",
             user,
             success: true
         });
-    }
-    catch (error) {
+
+    } catch (error) {
         console.log("Error", error);
         return res.status(500).json({
             message: "Internal server error",
