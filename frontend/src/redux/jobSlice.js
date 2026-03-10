@@ -6,7 +6,6 @@ const jobSlice = createSlice({
     allJobs: [],
   },
   reducers: {
-    // actions
     setAllJobs: (state, action) => {
       state.allJobs = action.payload;
     }
