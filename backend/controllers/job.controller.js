@@ -64,26 +64,36 @@ export const getAllJobs = async (req, res) => {
     }
 }
 //students
-
 export const getJobsById = async (req, res) => {
     try {
         const jobId = req.params.id;
+
+        // check if id is missing
+        if (!jobId || jobId === "undefined") {
+            return res.status(400).json({
+                message: "Invalid Job ID",
+                success: false
+            });
+        }
+
         const job = await Job.findById(jobId);
+
         if (!job) {
             return res.status(404).json({
-                message: "jobs not found",
+                message: "Job not found",
                 success: false
-            })
+            });
         }
+
         return res.status(200).json({
             job,
             success: true
-        })
+        });
+
+    } catch (error) {
+        console.log(error);
     }
-    catch (error) {
-        console.log(error)
-    }
-}
+};
 
 // number of job admin created
 
