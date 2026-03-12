@@ -62,8 +62,8 @@ function Navbar() {
                                 <PopoverTrigger asChild>
                                     <Avatar className="cursor-pointer">
                                         <AvatarImage
-                                            src={user?.profile?.profilePhoto}
-                                            alt="@shadcn"
+                                            src={user?.profile?.profilePhoto||"https://static.vecteezy.com/system/resources/thumbnails/050/907/528/small/3d-rendered-cartoon-boy-wearing-a-blue-hoodie-png.png"}
+                                         alt={user?.fullName || "Default Avatar"}
                                         />
                                     </Avatar>
                                 </PopoverTrigger>
@@ -71,8 +71,8 @@ function Navbar() {
                                     <div >
                                         <Avatar className="cursor-pointer">
                                             <AvatarImage
-                                                src={user?.profile?.profilePhoto}
-                                                alt="@shadcn"
+                                                src={user?.profile?.profilePhoto||"https://static.vecteezy.com/system/resources/thumbnails/050/907/528/small/3d-rendered-cartoon-boy-wearing-a-blue-hoodie-png.png"}
+                                               alt={user?.fullName || "Default Avatar"}
                                             />
                                         </Avatar>
                                         <div>
