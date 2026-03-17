@@ -2,24 +2,23 @@ import React, { useEffect } from 'react'
 import axios from "axios"
 import { COMPANY_API_END_POINT } from '@/utils/constant'
 import { useDispatch } from 'react-redux'
-
-import { setSingleCompany } from '@/redux/companySlice'
-const useGetAllJobs = () => {
+import { setAllJobs } from '@/redux/jobSlice'
+const useGetCompanyById = (companyId) => {
     const dispatch = useDispatch()
     useEffect(() => {
-        const fetchAllJobs = async () => {
+        const fetchSingleCompany = async () => {
             try {
-                const res = await axios.get(`${JOB_API_END_POINT}/get`, { withCredentials: true });
+                const res = await axios.get(`${COMPANY_API_END_POINT}/get/${companyId}`, { withCredentials: true });
                 if (res.data.success) {
-                    dispatch(setSingleCompany(res.data.company))
+                    dispatch(setAllJobs(res.data.jobs))
                 }
             }
             catch (error) {
                 console.log(error)
             }
         }
-        fetchAllJobs();
-    }, [companyId, dispatch])
+       fetchSingleCompany();
+    }, [])
 }
 
-export default useGetAllJobs
+export default useGetCompanyById

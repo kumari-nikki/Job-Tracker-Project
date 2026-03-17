@@ -8,6 +8,7 @@ import axios from 'axios'
 import { toast } from 'sonner'
 import { useDispatch } from 'react-redux'
 import { setSingleCompany } from '@/redux/companySlice'
+import { COMPANY_API_END_POINT } from "@/utils/constant";
 function CompanyCreate() {
     const [companyName, setCompanyName] = useState()
     const navigate = useNavigate()
