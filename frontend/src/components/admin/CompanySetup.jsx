@@ -96,6 +96,7 @@ useEffect(() => {
 
           <div className='flex items-center gap-5 p-8'>
             <Button
+              type="button" 
               onClick={() => navigate("/admin/companies")}
               variant="outline"
               className="flex items-center gap-2 border-gray-400 text-gray-600"
