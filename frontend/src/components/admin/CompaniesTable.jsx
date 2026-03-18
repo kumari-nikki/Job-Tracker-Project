@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,20 +8,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { MoreHorizontal, Edit } from "lucide-react";
 import { useSelector } from "react-redux";
 
 const CompaniesTable = () => {
-  const { companies } = useSelector(store => store.company)
+  const { companies, searchCompanyByText } = useSelector((store) => store.company);
+  const [filterCompany, setFilterCompany] = useState(companies);
+
+  useEffect(() => {
+    const filteredCompany = companies.filter((company) => {
+      if (!searchCompanyByText) return true;
+      return company?.name?.toLowerCase().includes(searchCompanyByText.toLowerCase());
+    });
+    setFilterCompany(filteredCompany);
+  }, [companies, searchCompanyByText]);
+
   return (
     <div>
       <Table>
@@ -35,44 +38,40 @@ const CompaniesTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {
-            companies?.length <= 0 ? (
-              <TableRow>
-                <TableCell colSpan={4}>
-                  You haven't registered any companies yet
+          {filterCompany?.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={4}>
+                {companies?.length === 0
+                  ? "You haven't registered any companies yet"
+                  : "No companies match your search"}
+              </TableCell>
+            </TableRow>
+          ) : (
+            filterCompany?.map((company) => (
+              <TableRow key={company._id}>
+                <TableCell>
+                  <Avatar>
+                    <AvatarImage src={company.logo || '/default-logo.png'} />
+                  </Avatar>
+                </TableCell>
+                <TableCell>{company.name}</TableCell>
+                <TableCell>{company.createdAt?.split("T")[0]}</TableCell>
+                <TableCell className="text-right cursor-pointer">
+                  <Popover>
+                    <PopoverTrigger>
+                      <MoreHorizontal />
+                    </PopoverTrigger>
+                    <PopoverContent className="w-32">
+                      <div className="flex items-center gap-2 w-fit cursor-pointer">
+                        <Edit className="w-4" />
+                        <span>Edit</span>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </TableCell>
               </TableRow>
-            ) : (
-              companies?.map((company) => {
-                return (
-                  <TableRow key={company._id}>
-                    <TableCell>
-                      <Avatar>
-                        <AvatarImage src={company.logo} />
-                      </Avatar>
-                    </TableCell>
-                    <TableCell>{company.name}</TableCell>
-                    <TableCell>
-                      {company.createdAt?.split("T")[0]}
-                    </TableCell>
-                    <TableCell className="text-right cursor-pointer">
-                      <Popover>
-                        <PopoverTrigger>
-                          <MoreHorizontal />
-                        </PopoverTrigger>
-                        <PopoverContent className="w-32">
-                          <div className="flex items-center gap-2 w-fit cursor-pointer">
-                            <Edit className="w-4" />
-                            <span>Edit</span>
-                          </div>
-                        </PopoverContent>
-                      </Popover>
-                    </TableCell>
-                  </TableRow>
-                )
-              })
-            )
-          }
+            ))
+          )}
         </TableBody>
       </Table>
     </div>
