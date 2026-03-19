@@ -9,8 +9,14 @@ import { COMPANY_API_END_POINT } from "@/utils/constant";
 import { toast } from 'sonner'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import useGetCompanyById from '@/hooks/useGetCompanyById'
 
 function CompanySetup() {
+
+  const params = useParams();
+  const navigate = useNavigate()
+
+  useGetCompanyById(params.id);
 
   const [input, setInput] = useState({
     name: "",
@@ -21,9 +27,7 @@ function CompanySetup() {
   });
 
   const [loading, setLoading] = useState(false)
-const {singleCompany}=useSelector(store=>store.company)
-  const params = useParams();
-  const navigate = useNavigate()
+  const { singleCompany } = useSelector(store => store.company)
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -76,17 +80,19 @@ const {singleCompany}=useSelector(store=>store.company)
       setLoading(false)
     }
   }
-useEffect(() => {
-  if (singleCompany) {
-    setInput({
-      name: singleCompany.name || "",
-      description: singleCompany.description || "",
-      website: singleCompany.website || "",
-      location: singleCompany.location || "",
-      file: null
-    })
-  }
-}, [singleCompany])
+
+  useEffect(() => {
+    if (singleCompany) {
+      setInput({
+        name: singleCompany.name || "",
+        description: singleCompany.description || "",
+        website: singleCompany.website || "",
+        location: singleCompany.location || "",
+        file: null
+      })
+    }
+  }, [singleCompany])
+
   return (
     <div>
       <Navbar />
@@ -96,7 +102,7 @@ useEffect(() => {
 
           <div className='flex items-center gap-5 p-8'>
             <Button
-              type="button" 
+              type="button"
               onClick={() => navigate("/admin/companies")}
               variant="outline"
               className="flex items-center gap-2 border-gray-400 text-gray-600"
@@ -117,7 +123,6 @@ useEffect(() => {
                 name="name"
                 value={input.name}
                 onChange={changeEventHandler}
-                className="border-gray-300 focus:border-black focus:ring-0"
               />
             </div>
 
@@ -128,7 +133,6 @@ useEffect(() => {
                 name="description"
                 value={input.description}
                 onChange={changeEventHandler}
-                className="border-gray-300 focus:border-black focus:ring-0"
               />
             </div>
 
@@ -139,7 +143,6 @@ useEffect(() => {
                 name="website"
                 value={input.website}
                 onChange={changeEventHandler}
-                className="border-gray-300 focus:border-black focus:ring-0"
               />
             </div>
 
@@ -150,7 +153,6 @@ useEffect(() => {
                 name="location"
                 value={input.location}
                 onChange={changeEventHandler}
-                className="border-gray-300 focus:border-black focus:ring-0"
               />
             </div>
 
@@ -160,7 +162,6 @@ useEffect(() => {
                 type="file"
                 accept="image/*"
                 onChange={changeFileHandler}
-                className="border-gray-300 focus:border-black focus:ring-0"
               />
             </div>
 
@@ -173,10 +174,7 @@ useEffect(() => {
                 Please Wait
               </Button>
             ) : (
-              <Button
-                type="submit"
-                className="w-full mt-8 bg-black text-white hover:bg-black/90"
-              >
+              <Button type="submit" className="w-full mt-8 bg-black text-white">
                 Update
               </Button>
             )

@@ -134,8 +134,6 @@ export const getApplicants = async (req, res) => {
     }
 };
 
-
-
 //UPDATE STATUS
 export const updateStatus = async (req, res) => {
     try {
