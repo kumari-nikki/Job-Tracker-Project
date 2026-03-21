@@ -132,7 +132,9 @@ export const updateProfile = async (req, res) => {
 
         //cloudinary comes here
         const fileUri = getDataUri(file);
-        const cloudResponse = await cloudinary.uploader.upload(fileUri.content)
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content,{
+            resource_type: "raw"   
+        })
 
         // 2️⃣ Parse skills if provided
         let skillsArray;

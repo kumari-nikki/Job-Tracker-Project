@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import authSlice from "./authSlice";
 import jobSlice from "./jobSlice";
 import companySlice from "./companySlice";
+import applicationSlice from "./applicationSlice"
 import {
     persistStore,
     persistReducer,
@@ -19,17 +20,13 @@ const persistConfig = {
     version: 1,
     storage,
 }
-
 const rootReducer = combineReducers({
     auth: authSlice,
     job: jobSlice,
-    company:companySlice
-
-
+    company: companySlice,
+    application: applicationSlice
 })
-
 const persistedReducer = persistReducer(persistConfig, rootReducer)
-
 export const store = configureStore({
     reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
@@ -42,5 +39,4 @@ export const store = configureStore({
 
 // ✅ export persistor for PersistGate
 export const persistor = persistStore(store);
-
 export default store;
