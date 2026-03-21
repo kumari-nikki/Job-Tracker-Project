@@ -35,8 +35,7 @@ export const postJob = async (req, res) => {
 }
 //students
 export const getAllJobs = async (req, res) => {
-    try {
-        const keyword = req.query.keyword || "";
+    try {        const keyword = req.query.keyword || "";
         const query = {
             $or: [
                 { title: { $regex: keyword, $options: "i" } },
@@ -98,27 +97,35 @@ export const getJobsById = async (req, res) => {
 };
 
 // number of job admin created
-
 export const getAdminJobs = async (req, res) => {
     try {
         const adminId = req.id;
-        const jobs = await Job.find({ created_by: adminId }).populate({
-            path:"company",
-            createdAt:-1
-            
-        })
-        if (!jobs) {
-            return res.status(404).json({
-                message: "jobs not found",
-                success: false
-            })
-        };
+
+        // Fetch jobs created by this recruiter/admin
+        const jobs = await Job.find({ created_by: adminId })
+            .populate("company")
+            .sort({ createdAt: -1 });
+
+        // Optional check (if no jobs found)
+        if (jobs.length === 0) {
+            return res.status(200).json({
+                message: "No jobs found",
+                jobs: [],
+                success: true
+            });
+        }
+
+        // Return jobs
         return res.status(200).json({
             jobs,
             success: true
-        })
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Something went wrong",
+            success: false
+        });
     }
-    catch (error) {
-        console.log(error)
-    }
-}
+};

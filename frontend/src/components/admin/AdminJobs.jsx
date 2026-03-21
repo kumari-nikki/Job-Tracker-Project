@@ -27,13 +27,13 @@ const AdminJobs = () => {
                 <div className='flex items-center justify-between w-full mb-5'>
                     <Input
                         className="w-72 border-black focus-visible:ring-0 focus-visible:border-black"
-                        placeholder="Filter by name"
+                        placeholder="Filter by name,role"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
                     <Button
                         className="bg-black text-white hover:bg-black/90"
-                        onClick={() => navigate("/admin/companies/create")}
+                        onClick={() => navigate("/admin/jobs/create")}
                     >
                         Post New Jobs
                     </Button>
