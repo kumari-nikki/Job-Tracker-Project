@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../shared/Navbar'
 import { useDispatch, useSelector } from 'react-redux';
 import { Label } from "@/components/ui/label"
@@ -21,7 +21,7 @@ function Signup() {
         role: "",
         file: ""
     });
-    const { loading } = useSelector(store => store.auth);
+    const { loading ,user} = useSelector(store => store.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const changeEventHandler = (e) => {
@@ -62,6 +62,11 @@ function Signup() {
               dispatch(setLoading(false));
             }
     }
+    useEffect(()=>{
+      if(user){
+        navigate("/")
+      }
+    },[user,navigate])
     return (
         <div>
             <Navbar />

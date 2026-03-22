@@ -1,9 +1,8 @@
 import React from 'react'
 import LatestJobCards from './LatestJobCards'
 import { useSelector } from 'react-redux'
-
 function LatestJobs() {
-    const { allJobs =[] } = useSelector(store => store.job); 
+    const { allJobs = [] } = useSelector(store => store.job);
 
     return (
         <div className='max-w-7xl mx-auto mt-10 mb-2'>
@@ -15,7 +14,7 @@ function LatestJobs() {
                 {
                     allJobs.length === 0
                         ? <span>No Job Available</span>
-                        : allJobs.map((job) => (  
+                        : allJobs.map((job) => (
                             <LatestJobCards key={job._id} job={job} />
                         ))
                 }

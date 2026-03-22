@@ -1,5 +1,7 @@
+import { useDispatch } from "react-redux";
 import { Checkbox } from "./ui/checkbox";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { setSearchedQuery } from "@/redux/jobSlice";
 
 const filterData = [
   {
@@ -17,6 +19,21 @@ const filterData = [
 ];
 
 function FilterCard() {
+  const [selectedValue, setSelectedValue] = useState([]);
+ const dispatch=useDispatch();
+  // ✅ FIXED handler (add/remove logic)
+  const changeHandler = (value) => {
+    setSelectedValue((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value) // remove
+        : [...prev, value] // add
+    );
+  };
+
+  useEffect(() => {
+   dispatch(setSearchedQuery(selectedValue));
+  }, [selectedValue]);
+
   return (
     <div className="pl-6">
       <h1 className="font-bold text-lg">Filter Jobs</h1>
@@ -28,7 +45,14 @@ function FilterCard() {
 
           {data.array.map((item, idx) => (
             <div key={idx} className="flex items-center space-x-2 my-2">
-              <Checkbox id={item} />
+              
+              {/* ✅ FIXED checkbox */}
+              <Checkbox
+                id={item}
+                checked={selectedValue.includes(item)}  // ✅ correct
+                onCheckedChange={() => changeHandler(item)} // ✅ toggle
+              />
+
               <label htmlFor={item}>{item}</label>
             </div>
           ))}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom"; 
 import { useDispatch, useSelector } from 'react-redux';
 import Navbar from '../shared/Navbar';
@@ -16,7 +16,7 @@ import { Loader2 } from "lucide-react";
 function Login() {
   const navigate = useNavigate(); 
   const dispatch = useDispatch();
-  const { loading } = useSelector(store => store.auth); 
+  const { loading,user } = useSelector(store => store.auth); 
 
   const [input, setInput] = useState({
     email: "",
@@ -51,7 +51,11 @@ function Login() {
       dispatch(setLoading(false));
     }
   }
-
+useEffect(()=>{
+  if(user){
+    navigate("/")
+  }
+},[user,navigate])
   return (
     <div>
       <Navbar />
