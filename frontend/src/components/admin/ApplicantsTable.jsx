@@ -40,7 +40,6 @@ function ApplicantsTable() {
                     A list of your recent applied user
                 </TableCaption>
 
-                {/* ✅ Static Header */}
                 <TableHeader>
                     <TableRow>
                         <TableHead>FullName</TableHead>
@@ -52,7 +51,6 @@ function ApplicantsTable() {
                     </TableRow>
                 </TableHeader>
 
-                {/* ✅ Dynamic Body */}
                 <TableBody>
                     {
                         applicants && applicants.length > 0 ? (
